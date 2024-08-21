@@ -1,8 +1,8 @@
 using Domain.Interfaces.Services;
 using Domain.Objects.Requests.Card;
+using Domain.Utils.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using Presentation.Web.Controllers.Base;
 
 namespace Presentation.Web.Controllers

@@ -1,6 +1,5 @@
 ﻿using Domain.Utils.Helpers;
 using FluentValidation;
-using Microsoft.IdentityModel.Tokens;
 using System.Text.RegularExpressions;
 
 namespace Domain.Objects.Requests.User

@@ -1,5 +1,4 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace Domain.Utils.Helpers
 {
@@ -35,6 +34,8 @@ namespace Domain.Utils.Helpers
 
             throw new ArgumentException("InvalidDocument");
         }
+
+        public static bool IsNullOrEmpty(this string stringRequest) => string.IsNullOrEmpty(stringRequest);
 
         public static string ToCpf(this string stringRequest)
         {

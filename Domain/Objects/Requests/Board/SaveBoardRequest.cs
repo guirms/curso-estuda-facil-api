@@ -1,5 +1,5 @@
-﻿using FluentValidation;
-using Microsoft.IdentityModel.Tokens;
+﻿using Domain.Utils.Helpers;
+using FluentValidation;
 
 namespace Domain.Objects.Requests.User
 {
