@@ -1,0 +1,13 @@
+﻿using Domain.Objects.Requests.User;
+using Domain.Objects.Responses.Asset;
+
+namespace Domain.Interfaces.Services
+{
+    public interface IBoardService
+    {
+        Task Delete(int boardId);
+        Task<IEnumerable<GetBoardResultsResponse>?> Get(int currentPage, string? userName);
+        Task<int> Save(SaveBoardRequest saveBoardRequest);
+        Task Update(UpdateBoardRequest updateBoardRequest);
+    }
+}
