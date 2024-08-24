@@ -41,6 +41,3 @@ Caso você deseje criar um container Docker a partir dessa imagem, siga os segui
 ## Considerações
 
 Desenvolvi este projeto para o lançamento do meu curso .NET FOCADO NO MERCADO DE TRABALHO. Coloquei em prática diversos conceitos adquiridos durante meus cinco anos de experiência na área e busquei focar em construir uma solução escalável tanto conceitual quanto tecnicamente. Espero que todos os alunos tenham tido uma boa experiência durante o curso assim como eu tive durante o seu planejamento e desenvolvimento. Agradeço a todos os alunos e gostaria de ressaltar que é uma satisfação indescritível poder passar meu conhecimento e experiência adiante e espero que nos vejamos em breve em novos desafios (novidades por aí...😉).
-
-<!-- SHIELDS / LOGOS -->
-[dotnet-logo]: ![image](https://github.com/user-attachments/assets/f36e7cda-0c98-4fba-be49-ae40d6f4d2b7)
