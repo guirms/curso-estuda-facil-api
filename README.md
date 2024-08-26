@@ -27,7 +27,7 @@ Para executar o projeto com sucesso, você deve atender os seguintes requisitos:
 Para criar uma instância da API localmente, siga o passo a passo:
 
 - Clone o projeto na sua pasta de preferência através do comando `git clone https://github.com/guirms/curso-estuda-facil-api.git`
-- No terminal, dentro da pasta raíz do projeto, execute o comando `cd ./Presentation.Web`
+- Dentro da pasta raíz do projeto, execute o comando `cd ./Presentation.Web`
 - Por fim, crie a instância da API através do comando `dotnet run`
 
 ## Execute a aplicação através do Docker
