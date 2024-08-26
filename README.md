@@ -36,7 +36,7 @@ Esta API está "dockerizada" e sua imagem está hospedada no [DockerHub](https:/
 Caso você deseje criar um container Docker a partir dessa imagem, siga os seguintes passos:
 
 - Caso ainda não tenha o Docker instalado, siga as instruções para instalá-lo [aqui](https://docs.docker.com/get-started/get-docker/)
-- No terminal, execute o seguinte comando `docker run -it -p 5000:8080 guirms/estuda-facil`
+- No terminal, execute o seguinte comando `docker run -d -p 5000:8080 guirms/estuda-facil-api`
 
 ## Considerações
 
