@@ -17,7 +17,7 @@ namespace Domain.Services
         public async Task<IEnumerable<GetBoardResultsResponse>?> Get(int currentPage, string? userName) =>
              await boardRepository.GetBoardResults(HttpContextHelper.GetUserId(), currentPage, userName);
 
-        public async Task<int> Save(SaveBoardRequest saveBoardRequest)
+        public async Task Save(SaveBoardRequest saveBoardRequest)
         {
             var userId = HttpContextHelper.GetUserId();
 
@@ -29,7 +29,7 @@ namespace Domain.Services
 
             var currentDateTime = DateTime.Now;
 
-            var daysUntilExam = saveBoardRequest.ApplicationDateTime.Subtract(currentDateTime).Days;
+            var daysUntilExam = saveBoardRequest.ExamDateTime.Subtract(currentDateTime).Days;
 
             var generatedCards = await pyAIExternal.GenerateBoard(saveBoardRequest.Theme, daysUntilExam)
                 ?? throw new InvalidOperationException("Erro ao gerar cards, considere reescrever o tema da avaliação!");
@@ -56,7 +56,7 @@ namespace Domain.Services
                 }
             }
 
-            return await boardRepository.SaveBoardAndCards(board, cards);
+            await boardRepository.SaveBoardAndCards(board, cards);
         }
 
         public async Task Update(UpdateBoardRequest updateBoardRequest)

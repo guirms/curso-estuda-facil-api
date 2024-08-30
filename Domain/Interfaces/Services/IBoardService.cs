@@ -7,7 +7,7 @@ namespace Domain.Interfaces.Services
     {
         Task Delete(int boardId);
         Task<IEnumerable<GetBoardResultsResponse>?> Get(int currentPage, string? userName);
-        Task<int> Save(SaveBoardRequest saveBoardRequest);
+        Task Save(SaveBoardRequest saveBoardRequest);
         Task Update(UpdateBoardRequest updateBoardRequest);
     }
 }

@@ -36,14 +36,14 @@ namespace Domain.Services
             if (user.Password != encryptedFullPassword)
                 throw new InvalidOperationException("InvalidUsernameOrPassword");
 
-            var userToken = authService.GenerateToken(user.UserId);
+            var jwtToken = authService.GenerateToken(user.UserId);
 
-            if (userToken.IsNullOrEmpty())
+            if (jwtToken.IsNullOrEmpty())
                 throw new InvalidOperationException("ErrorLoggingIn");
 
             await userRepository.Update(user);
 
-            return new LogInResponse(userToken, user);
+            return new LogInResponse { AuthToken = jwtToken };
         }
 
         private static string GetSalt() => DateTime.UtcNow.Millisecond.ToString("000") + new Random().Next(100).ToString("00");

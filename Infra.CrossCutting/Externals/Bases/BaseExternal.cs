@@ -13,13 +13,18 @@ namespace Infra.CrossCutting.Externals.Bases
             _client.Timeout = TimeSpan.FromSeconds(30);
         }
 
-        internal async Task<string?> Get(string methodName, Dictionary<string, string?> queryParams)
+        internal async Task<string?> Get(string methodName, Dictionary<string, string?> queryParams, bool useQueryParams = true)
         {
             HttpResponseMessage response;
 
             if (queryParams != null)
             {
-                var uri = QueryHelpers.AddQueryString(methodName, queryParams);
+                string uri;
+
+                if (useQueryParams)
+                    uri = QueryHelpers.AddQueryString(methodName, queryParams);
+                else
+                    uri = GetPathParamUri(methodName, queryParams);
 
                 response = await _client.GetAsync(uri);
             }
@@ -30,6 +35,16 @@ namespace Infra.CrossCutting.Externals.Bases
                 throw new HttpRequestException("ErrorCommunicatingWithExternalService");
 
             return await response.Content.ReadAsStringAsync();
+        }
+
+        private static string GetPathParamUri(string methodName, Dictionary<string, string?> queryParams)
+        {
+            var uri = methodName;
+
+            foreach (var queryParam in queryParams)
+                uri = uri + $"/{queryParam.Value}";
+
+            return uri;
         }
     }
 }

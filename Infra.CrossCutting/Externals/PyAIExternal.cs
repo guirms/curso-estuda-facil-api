@@ -13,18 +13,20 @@ namespace Infra.CrossCutting.Externals
         {
             try
             {
-                var queryParams = new Dictionary<string, string?>
+                var parameters = new Dictionary<string, string?>
                 {
+                    ["use_openai"] = "false",
                     ["theme"] = theme,
-                    ["daysUntilExam"] = daysUntilExam.ToString()
+                    ["days_until_exam"] = daysUntilExam.ToString()
                 };
 
-                IEnumerable<CardData>? response = null;
 
                 var jsonOptions = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 };
+
+                IEnumerable<CardData>? response = null;
 
                 var count = 0;
 
@@ -32,7 +34,7 @@ namespace Infra.CrossCutting.Externals
                 {
                     try
                     {
-                        var result = await Get("", queryParams);
+                        var result = await Get("generateBoard", parameters, false);
 
                         response = JsonSerializer.Deserialize<IEnumerable<CardData>>(result!, jsonOptions);
                     }

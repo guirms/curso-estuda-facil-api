@@ -34,9 +34,9 @@ namespace Presentation.Web.Controllers
             {
                 saveBoardRequestValidator.Validate(saveBoardRequest);
 
-                var boardId = await boardService.Save(saveBoardRequest);
+                await boardService.Save(saveBoardRequest);
 
-                return Ok(new { boardId });
+                return Created();
             }
             catch (Exception ex)
             {

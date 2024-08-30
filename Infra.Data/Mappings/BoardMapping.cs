@@ -21,7 +21,7 @@ namespace Infra.Data.Mappings
                 .HasMaxLength(60)
                 .IsRequired();
 
-            builder.Property(b => b.ApplicationDateTime)
+            builder.Property(b => b.ExamDateTime)
                 .HasColumnType("datetime(0)")
                 .IsRequired();
 
