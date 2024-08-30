@@ -22,12 +22,14 @@ Para executar o projeto com sucesso, você deve atender os seguintes requisitos:
 - [.NET 8.0](https://dotnet.microsoft.com/pt-br/download/dotnet/8.0)
 - [MySQL](https://dev.mysql.com/downloads/) (A versão utilizada no projeto é 8.0.33)
 
+> Importante: Para gerar o planejamento de estudos, será necessário que você crie também uma instância da [API do microsserviço do projeto](https://github.com/guirms/curso-estuda-facil-ms).
+
 ## Criando instância da API
 
 Para criar uma instância da API localmente, siga o passo a passo:
 
 - Clone o projeto na sua pasta de preferência através do comando `git clone https://github.com/guirms/curso-estuda-facil-api.git`
-- No terminal, dentro da pasta raíz do projeto, execute o comando `cd ./Presentation.Web`
+- Dentro da pasta raíz do projeto, execute o comando `cd ./Presentation.Web`
 - Por fim, crie a instância da API através do comando `dotnet run`
 
 ## Execute a aplicação através do Docker
@@ -36,7 +38,7 @@ Esta API está "dockerizada" e sua imagem está hospedada no [DockerHub](https:/
 Caso você deseje criar um container Docker a partir dessa imagem, siga os seguintes passos:
 
 - Caso ainda não tenha o Docker instalado, siga as instruções para instalá-lo [aqui](https://docs.docker.com/get-started/get-docker/)
-- No terminal, execute o seguinte comando `docker run -it -p 5000:8080 guirms/estuda-facil`
+- No terminal, execute o seguinte comando `docker run -d -p 5000:8080 guirms/estuda-facil-api`
 
 ## Considerações
 
