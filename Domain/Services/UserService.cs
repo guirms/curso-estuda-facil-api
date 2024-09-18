@@ -15,7 +15,11 @@ namespace Domain.Services
 
         public async Task Save(SaveUserRequest saveUserRequest)
         {
-            await userRepository.HasUserWithTheSameInfo(saveUserRequest);
+            if (await userRepository.HasUserWithSameEmail(saveUserRequest.Email))
+                throw new InvalidOperationException("Email já cadastrado");
+
+            if (await userRepository.HasUserWithSameDocument(saveUserRequest.Document))
+                throw new InvalidOperationException("CPF já cadastrado");
 
             var user = mapper.Map<User>(saveUserRequest);
 
@@ -27,19 +31,19 @@ namespace Domain.Services
         public async Task<LogInResponse> LogIn(LogInRequest logInRequest)
         {
             var user = await userRepository.GetUserByEmail(logInRequest.Email)
-                ?? throw new InvalidOperationException("InvalidUsernameOrPassword");
+                ?? throw new InvalidOperationException("Email ou senha incorretos");
 
             var keyBytes = Encoding.ASCII.GetBytes(user.Name);
             var fullPasswordBytes = Encoding.ASCII.GetBytes(logInRequest.Password + user.Salt);
             var encryptedFullPassword = encryptionService.EncryptDeterministic(keyBytes, fullPasswordBytes);
 
             if (user.Password != encryptedFullPassword)
-                throw new InvalidOperationException("InvalidUsernameOrPassword");
+                throw new InvalidOperationException("Email ou senha incorretos");
 
             var jwtToken = authService.GenerateToken(user.UserId);
 
             if (jwtToken.IsNullOrEmpty())
-                throw new InvalidOperationException("ErrorLoggingIn");
+                throw new InvalidOperationException();
 
             await userRepository.Update(user);
 

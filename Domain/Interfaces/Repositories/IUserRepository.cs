@@ -1,5 +1,4 @@
 ﻿using Domain.Models;
-using Domain.Objects.Requests.User;
 using Domain.Objects.Responses.Asset;
 
 namespace Domain.Interfaces.Repositories
@@ -7,7 +6,8 @@ namespace Domain.Interfaces.Repositories
     public interface IUserRepository : IBaseSqlRepository<User>
     {
         Task<User?> GetUserByEmail(string userEmail);
-        Task HasUserWithTheSameInfo(SaveUserRequest saveUserRequest);
+        Task<bool> HasUserWithSameEmail(string email);
+        Task<bool> HasUserWithSameDocument(string document);
         Task<IEnumerable<UserResultsResponse>?> GetUserResults(int currentPage, string? userName, int takeQuantity = 10);
     }
 }

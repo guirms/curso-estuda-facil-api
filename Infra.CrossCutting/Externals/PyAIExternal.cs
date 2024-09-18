@@ -53,7 +53,7 @@ namespace Infra.CrossCutting.Externals
             }
             catch
             {
-                throw new HttpRequestException("ErrorCommunicatingWithExternalService");
+                throw new HttpRequestException("Erro ao se comunicar com serviço externo");
             }
         }
     }

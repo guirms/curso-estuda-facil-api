@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Interfaces.Repositories;
 using Domain.Models;
-using Domain.Objects.Requests.User;
 using Domain.Objects.Responses.Asset;
 using Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
@@ -12,14 +11,9 @@ namespace Infra.Data.Repositories
     {
         public async Task<User?> GetUserByEmail(string userEmail) => await _typedContext.AsNoTracking().FirstOrDefaultAsync(u => u.Email == userEmail);
 
-        public async Task HasUserWithTheSameInfo(SaveUserRequest saveUserRequest)
-        {
-            if (await HasUserWithSameEmail(saveUserRequest.Email))
-                throw new InvalidOperationException("UserWithSameEmailError");
+        public async Task<bool> HasUserWithSameEmail(string email) => await _typedContext.AsNoTracking().AnyAsync(u => u.Email == email);
 
-            if (await HasUserWithSameDocument(saveUserRequest.Document))
-                throw new InvalidOperationException("UserWithSameDocumentError");
-        }
+        public async Task<bool> HasUserWithSameDocument(string document) => await _typedContext.AsNoTracking().AnyAsync(u => u.Document == document);
 
         public async Task<IEnumerable<UserResultsResponse>?> GetUserResults(int currentPage, string? userName, int takeQuantity = 10)
         {
@@ -34,9 +28,5 @@ namespace Infra.Data.Repositories
 
             return await mapper.ProjectTo<UserResultsResponse>(query).ToListAsync();
         }
-
-        private async Task<bool> HasUserWithSameEmail(string email) => await _typedContext.AsNoTracking().AnyAsync(u => u.Email == email);
-
-        private async Task<bool> HasUserWithSameDocument(string document) => await _typedContext.AsNoTracking().AnyAsync(u => u.Document == document);
     }
 }
