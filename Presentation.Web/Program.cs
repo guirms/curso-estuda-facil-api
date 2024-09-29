@@ -81,7 +81,7 @@ builder.Services.AddAutoMapper(typeof(Application.AutoMapper.AutoMapper));
 
 #region Mysql Connection
 
-var mysqlConnection = builder.Configuration.GetConnectionString("MySQL").ToSafeValue();
+var mysqlConnection = builder.Configuration.GetConnectionString("MainDb").ToSafeValue();
 
 builder.Services.AddDbContext<SqlContext>(opt => opt.UseMySql(
     mysqlConnection, ServerVersion.Parse("8.0.33")));
@@ -145,6 +145,13 @@ NativeInjector.RegisterServices(builder.Services);
 #endregion
 
 var app = builder.Build();
+
+# region Docker environment variables
+
+if (builder.Environment.IsDevelopment())
+    builder.Configuration.AddEnvironmentVariables();
+
+#endregion
 
 #region Database Creation
 

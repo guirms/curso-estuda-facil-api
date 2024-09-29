@@ -7,7 +7,7 @@ using System.Text.Json;
 
 namespace Infra.CrossCutting.Externals
 {
-    public class PyAIExternal(IHttpClientFactory client, IConfiguration configuration) : BaseExternal(configuration.GetTag("PyAIIp"), client), IPyAIExternal
+    public class PyAIExternal(IHttpClientFactory client, IConfiguration configuration) : BaseExternal(configuration.GetTag("PyAiIp"), client), IPyAIExternal
     {
         public async Task<IEnumerable<CardData>> GenerateBoard(string theme, int daysUntilExam)
         {
