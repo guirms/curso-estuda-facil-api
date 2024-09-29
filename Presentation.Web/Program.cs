@@ -1,8 +1,11 @@
-﻿using Domain.Utils.Constants;
+﻿using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using Domain.Utils.Constants;
 using Domain.Utils.Helpers;
 using Infra.CrossCutting.Security;
 using Infra.Data.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -10,6 +13,7 @@ using Presentation.Web.Filters;
 using Presentation.Web.NativeInjector;
 using System.Text;
 using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.DataProtection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -93,11 +97,12 @@ var encryptionService = new EncryptionService();
 #region Mysql Connection
 
 var mysqlConnection = builder.Configuration.GetConnectionString("MainDb").ToSafeValue();
-
 mysqlConnection = encryptionService.DecryptDynamic(mysqlConnection, encryptionKey);
 
+var serverVersion = builder.Configuration.GetSection("ServerVersion").Get<string>();
+
 builder.Services.AddDbContext<SqlContext>(opt => opt.UseMySql(
-    mysqlConnection, ServerVersion.Parse("8.0.33")));
+    mysqlConnection, ServerVersion.Parse(serverVersion)));
 
 #endregion
 
@@ -154,6 +159,18 @@ builder.Services.AddRateLimiter(opt =>
 #region Dependency Injector
 
 NativeInjector.RegisterServices(builder.Services);
+
+#endregion
+
+#region DataProtectionKeys
+
+if (!isDevelopment)
+    builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(@"/root/.aspnet/DataProtection-Keys"))
+        .UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration()
+        {
+            EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
+            ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
+        });
 
 #endregion
 
