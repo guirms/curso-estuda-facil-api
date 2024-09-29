@@ -1,11 +1,11 @@
-﻿using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
-using Domain.Utils.Constants;
+﻿using Domain.Utils.Constants;
 using Domain.Utils.Helpers;
 using Infra.CrossCutting.Security;
 using Infra.Data.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -13,7 +13,6 @@ using Presentation.Web.Filters;
 using Presentation.Web.NativeInjector;
 using System.Text;
 using System.Threading.RateLimiting;
-using Microsoft.AspNetCore.DataProtection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -99,7 +98,7 @@ var encryptionService = new EncryptionService();
 var mysqlConnection = builder.Configuration.GetConnectionString("MainDb").ToSafeValue();
 mysqlConnection = encryptionService.DecryptDynamic(mysqlConnection, encryptionKey);
 
-var serverVersion = builder.Configuration.GetSection("ServerVersion").Get<string>();
+var serverVersion = builder.Configuration.GetSection("ServerVersion").Get<string>()!;
 
 builder.Services.AddDbContext<SqlContext>(opt => opt.UseMySql(
     mysqlConnection, ServerVersion.Parse(serverVersion)));
@@ -108,8 +107,11 @@ builder.Services.AddDbContext<SqlContext>(opt => opt.UseMySql(
 
 #region JWT Authentication
 
-var jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>();
-var jwtKey = builder.Configuration.GetSection("Jwt:Key").Get<string>().ToSafeValue();
+var jwtKey = builder.Configuration.GetSection("Jwt:Key").Get<string>()!;
+jwtKey = encryptionService.DecryptDynamic(jwtKey, encryptionKey);
+
+var jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>()!;
+jwtIssuer = encryptionService.DecryptDynamic(jwtIssuer, encryptionKey);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
  .AddJwtBearer(options =>
