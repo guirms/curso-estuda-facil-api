@@ -1,4 +1,6 @@
-﻿using Domain.Utils.Helpers;
+﻿using Domain.Utils.Constants;
+using Domain.Utils.Helpers;
+using Infra.CrossCutting.Security;
 using Infra.Data.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -79,9 +81,20 @@ builder.Services.AddAutoMapper(typeof(Application.AutoMapper.AutoMapper));
 
 #endregion
 
+#region Necessary Properties
+
+var isDevelopment = builder.Environment.IsDevelopment();
+var encryptionKey = isDevelopment ? Pwd.DevEncryptionKey : Pwd.PrdEncryptionKey;
+
+var encryptionService = new EncryptionService();
+
+#endregion
+
 #region Mysql Connection
 
 var mysqlConnection = builder.Configuration.GetConnectionString("MainDb").ToSafeValue();
+
+mysqlConnection = encryptionService.DecryptDynamic(mysqlConnection, encryptionKey);
 
 builder.Services.AddDbContext<SqlContext>(opt => opt.UseMySql(
     mysqlConnection, ServerVersion.Parse("8.0.33")));
@@ -148,7 +161,7 @@ var app = builder.Build();
 
 # region Docker environment variables
 
-if (builder.Environment.IsDevelopment())
+if (isDevelopment)
     builder.Configuration.AddEnvironmentVariables();
 
 #endregion
@@ -168,11 +181,11 @@ await configContext.Database.EnsureCreatedAsync();
 
 #region Swagger
 
-//if (app.Environment.IsDevelopment())
-//{
-app.UseSwagger();
-app.UseSwaggerUI();
-//}
+if (isDevelopment)
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 #endregion
 
