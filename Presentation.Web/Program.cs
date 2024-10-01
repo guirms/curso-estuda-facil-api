@@ -108,10 +108,10 @@ builder.Services.AddDbContext<SqlContext>(opt => opt.UseMySql(
 #region JWT Authentication
 
 var jwtKey = builder.Configuration.GetSection("Jwt:Key").Get<string>()!;
-jwtKey = encryptionService.DecryptDynamic(jwtKey, encryptionKey);
+Token.JwtKey = encryptionService.DecryptDynamic(jwtKey, encryptionKey);
 
 var jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>()!;
-jwtIssuer = encryptionService.DecryptDynamic(jwtIssuer, encryptionKey);
+Token.JwtIssuer = encryptionService.DecryptDynamic(jwtIssuer, encryptionKey);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
  .AddJwtBearer(options =>
@@ -122,9 +122,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
          ValidateAudience = true,
          ValidateLifetime = true,
          ValidateIssuerSigningKey = true,
-         ValidIssuer = jwtIssuer,
-         ValidAudience = jwtIssuer,
-         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+         ValidIssuer = Token.JwtIssuer,
+         ValidAudience = Token.JwtIssuer,
+         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Token.JwtKey))
      };
  });
 

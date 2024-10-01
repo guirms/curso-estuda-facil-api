@@ -1,7 +1,5 @@
 ﻿using Domain.Interfaces.Services;
 using Domain.Utils.Constants;
-using Domain.Utils.Helpers;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -9,14 +7,11 @@ using System.Text;
 
 namespace Infra.CrossCutting.Security
 {
-    public class AuthService(IConfiguration configuration) : IAuthService
+    public class AuthService : IAuthService
     {
         public string GenerateToken(int claimId)
         {
-            var jwtKey = configuration["Jwt:Key"].ToSafeValue();
-            var jwtIssuer = configuration["Jwt:Issuer"].ToSafeValue();
-
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Token.JwtKey));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new Claim[]
@@ -25,8 +20,8 @@ namespace Infra.CrossCutting.Security
             };
 
             var securityToken = new JwtSecurityToken(
-                jwtIssuer,
-                jwtIssuer,
+                Token.JwtIssuer,
+                Token.JwtIssuer,
                 claims,
                 expires: DateTime.Now.AddHours(10),
                 signingCredentials: credentials);
