@@ -10,7 +10,7 @@ namespace Domain.Utils.Helpers
         private static JwtSecurityToken? HeaderAuthToken { get; set; }
 
         public static int GetUserId()
-            => HeaderAuthToken?.GetClaimValue(Token.NameIdentifier)?.ToInt("InvalidAuthToken")
+            => HeaderAuthToken?.GetClaimValue(HeaderKey.NameIdentifier)?.ToInt("InvalidAuthToken")
                 ?? throw new InvalidOperationException("ErrorGettingSessionInfo");
 
         public static void SaveTokens(this IHttpContextAccessor contextAccessor)
@@ -22,7 +22,7 @@ namespace Domain.Utils.Helpers
         {
             try
             {
-                contextAccessor.HttpContext!.Request.Headers.TryGetValue(Token.Authorization, out StringValues headerValue);
+                contextAccessor.HttpContext!.Request.Headers.TryGetValue(HeaderKey.Authorization, out StringValues headerValue);
 
                 var stringToken = headerValue.FirstOrDefault()?.ToCleanJwtToken()
                     ?? throw new InvalidOperationException("ErrorGettingSessionInfo");

@@ -11,17 +11,17 @@ namespace Infra.CrossCutting.Security
     {
         public string GenerateToken(int claimId)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Token.JwtKey));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(TokenInfo.JwtKey));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new Claim[]
             {
-                new(Token.NameIdentifier, claimId.ToString())
+                new(HeaderKey.NameIdentifier, claimId.ToString())
             };
 
             var securityToken = new JwtSecurityToken(
-                Token.JwtIssuer,
-                Token.JwtIssuer,
+                TokenInfo.JwtIssuer,
+                TokenInfo.JwtIssuer,
                 claims,
                 expires: DateTime.Now.AddHours(10),
                 signingCredentials: credentials);

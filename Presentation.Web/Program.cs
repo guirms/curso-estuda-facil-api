@@ -37,7 +37,7 @@ builder.Services.AddMvc(opts =>
 
 builder.Services.AddSwaggerGen(option =>
 {
-    option.SwaggerDoc("v1", new OpenApiInfo { Title = "Cago o zolho", Version = "v1" });
+    option.SwaggerDoc("v1", new OpenApiInfo { Title = "Estuda Fácil API", Version = "V1" });
     option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -108,10 +108,10 @@ builder.Services.AddDbContext<SqlContext>(opt => opt.UseMySql(
 #region JWT Authentication
 
 var jwtKey = builder.Configuration.GetSection("Jwt:Key").Get<string>()!;
-Token.JwtKey = encryptionService.DecryptDynamic(jwtKey, encryptionKey);
+TokenInfo.JwtKey = encryptionService.DecryptDynamic(jwtKey, encryptionKey);
 
 var jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>()!;
-Token.JwtIssuer = encryptionService.DecryptDynamic(jwtIssuer, encryptionKey);
+TokenInfo.JwtIssuer = encryptionService.DecryptDynamic(jwtIssuer, encryptionKey);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
  .AddJwtBearer(options =>
@@ -122,9 +122,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
          ValidateAudience = true,
          ValidateLifetime = true,
          ValidateIssuerSigningKey = true,
-         ValidIssuer = Token.JwtIssuer,
-         ValidAudience = Token.JwtIssuer,
-         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Token.JwtKey))
+         ValidIssuer = TokenInfo.JwtIssuer,
+         ValidAudience = TokenInfo.JwtIssuer,
+         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(TokenInfo.JwtKey))
      };
  });
 
