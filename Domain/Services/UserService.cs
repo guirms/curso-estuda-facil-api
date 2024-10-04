@@ -30,22 +30,20 @@ namespace Domain.Services
 
         public async Task<LogInResponse> LogIn(LogInRequest logInRequest)
         {
-            var user = await userRepository.GetUserByEmail(logInRequest.Email)
+            var userAuthInfo = await userRepository.GetUserAuthInfoByEmail(logInRequest.Email)
                 ?? throw new InvalidOperationException("Email ou senha incorretos");
 
-            var keyBytes = Encoding.ASCII.GetBytes(user.Name);
-            var fullPasswordBytes = Encoding.ASCII.GetBytes(logInRequest.Password + user.Salt);
+            var keyBytes = Encoding.ASCII.GetBytes(userAuthInfo.Name);
+            var fullPasswordBytes = Encoding.ASCII.GetBytes(logInRequest.Password + userAuthInfo.Salt);
             var encryptedFullPassword = encryptionService.EncryptDeterministic(keyBytes, fullPasswordBytes);
 
-            if (user.Password != encryptedFullPassword)
+            if (userAuthInfo.Password != encryptedFullPassword)
                 throw new InvalidOperationException("Email ou senha incorretos");
 
-            var jwtToken = authService.GenerateToken(user.UserId);
+            var jwtToken = authService.GenerateToken(userAuthInfo.UserId);
 
             if (jwtToken.IsNullOrEmpty())
                 throw new InvalidOperationException();
-
-            await userRepository.Update(user);
 
             return new LogInResponse { AuthToken = jwtToken };
         }

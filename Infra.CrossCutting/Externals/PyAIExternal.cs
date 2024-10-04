@@ -20,7 +20,6 @@ namespace Infra.CrossCutting.Externals
                     ["days_until_exam"] = daysUntilExam.ToString()
                 };
 
-
                 var jsonOptions = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true

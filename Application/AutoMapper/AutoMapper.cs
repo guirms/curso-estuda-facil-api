@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Models;
+using Domain.Objects.Dto_s.User;
 using Domain.Objects.Requests.User;
 using Domain.Objects.Responses.Asset;
 using Domain.Objects.Responses.Card;
@@ -25,6 +26,8 @@ namespace Application.AutoMapper
 
             CreateMap<User, UserResultsResponse>()
                .ForMember(u => u.Document, opts => opts.MapFrom(u => u.Document.ToDocument()));
+
+            CreateMap<User, UserAuthInfoDto>();
         }
 
         #endregion
