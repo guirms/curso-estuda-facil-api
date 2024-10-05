@@ -2,8 +2,8 @@
 {
     public enum ECardStatus
     {
-        ToDo = 0,
-        Doing = 1,
-        Done = 2,
+        ToDo,
+        Doing,
+        Done,
     }
 }

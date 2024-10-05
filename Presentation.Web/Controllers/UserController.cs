@@ -59,17 +59,17 @@ namespace Presentation.Web.Controllers
             }
         }
 
-        [HttpGet("Test"), AllowAnonymous]
-        public IActionResult Test()
-        {
-            try
-            {
-                return Ok("Ok");
-            }
-            catch
-            {
-                return BadRequest("Error");
-            }
-        }
+        //[HttpGet("Test"), AllowAnonymous]
+        //public IActionResult Test()
+        //{
+        //    try
+        //    {
+        //        return Ok("Ok");
+        //    }
+        //    catch
+        //    {
+        //        return BadRequest("Error");
+        //    }
+        //}
     }
 }

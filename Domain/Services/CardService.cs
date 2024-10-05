@@ -2,15 +2,15 @@
 using Domain.Interfaces.Services;
 using Domain.Objects.Requests.Card;
 using Domain.Objects.Responses.Card;
-using Domain.Utils.Helpers;
+using Domain.Utils.Constants;
 
 namespace Domain.Services
 {
     public class CardService(ICardRepository cardRepository) : ICardService
     {
-        public async Task<IEnumerable<GetCardsResponse>?> Get(int boardId)
+        public async Task<IEnumerable<GetCardsResponse>?> Get(int boardId, string? cardName)
         {
-            var result = await cardRepository.GetCardResults(boardId, 1, null);
+            var result = await cardRepository.GetCardResults(boardId, Session.UserId, cardName);
 
             if (result == null || !result.Any())
                 throw new InvalidOperationException("Nenhum card encontrado");
@@ -23,27 +23,27 @@ namespace Domain.Services
             [
                 new() {
                     TaskStatus = Models.Enums.Task.ECardStatus.ToDo,
-                    Card = todoList
+                    Cards = todoList
                 },
                 new() {
                     TaskStatus = Models.Enums.Task.ECardStatus.Doing,
-                    Card = doingList
+                    Cards = doingList
                 },
                 new() {
                     TaskStatus = Models.Enums.Task.ECardStatus.Done,
-                    Card = doneList
+                    Cards = doneList
                 }
             ];
         }
 
-        public async Task UpdateStatus(UpdateCardStatusRequest[] updateCardStatusRequest)
+        public async Task UpdateStatus(IEnumerable<UpdateCardStatusRequest> updateCardStatusRequest)
         {
             var cardIds = updateCardStatusRequest.Select(c => c.CardId);
 
-            var cards = await cardRepository.GetByIdAndUserId(cardIds, HttpContextHelper.GetUserId());
+            var cards = await cardRepository.GetByIdAndUserId(cardIds, Session.UserId);
 
-            if (cards == null || !cards.Any())
-                throw new InvalidOperationException("Cards não encontrados");
+            if (cards == null || !cards.Any() || cards.Count() != updateCardStatusRequest.Count())
+                throw new InvalidOperationException("Card(s) não encontrado(s)");
 
             var currentDateTime = DateTime.Now;
 

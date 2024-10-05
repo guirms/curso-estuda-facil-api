@@ -5,7 +5,7 @@ namespace Domain.Interfaces.Services
 {
     public interface ICardService
     {
-        Task<IEnumerable<GetCardsResponse>?> Get(int boardId);
-        Task UpdateStatus(UpdateCardStatusRequest[] updateCardStatusRequest);
+        Task<IEnumerable<GetCardsResponse>?> Get(int boardId, string? cardName);
+        Task UpdateStatus(IEnumerable<UpdateCardStatusRequest> updateCardStatusRequest);
     }
 }

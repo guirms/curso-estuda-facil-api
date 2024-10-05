@@ -10,7 +10,7 @@ namespace Infra.Data.Repositories
 {
     public class UserRepository(SqlContext context, IMapper mapper) : BaseSqlRepository<User>(context), IUserRepository
     {
-        public async Task<UserAuthInfoDto?> GetUserAuthInfoByEmail(string email) => mapper.Map<UserAuthInfoDto>(await _typedContext.FirstOrDefaultAsync(u => u.Email == email));        
+        public async Task<UserAuthInfoDto?> GetUserAuthInfoByEmail(string email) => mapper.Map<UserAuthInfoDto>(await _typedContext.FirstOrDefaultAsync(u => u.Email == email));
 
         public async Task<bool> HasUserWithSameEmail(string email) => await _typedContext.AsNoTracking().AnyAsync(u => u.Email == email);
 

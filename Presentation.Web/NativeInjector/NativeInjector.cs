@@ -1,6 +1,7 @@
 ﻿using Domain.Interfaces.Externals;
 using Domain.Interfaces.Repositories;
 using Domain.Interfaces.Services;
+using Domain.Objects.Requests.Card;
 using Domain.Objects.Requests.User;
 using Domain.Services;
 using FluentValidation;
@@ -40,10 +41,11 @@ namespace Presentation.Web.NativeInjector
 
             #region Validators
 
-            services.AddTransient<IValidator<SaveUserRequest>, UserRequestValidator>();
+            services.AddTransient<IValidator<SaveUserRequest>, SaveUserRequestValidator>();
             services.AddTransient<IValidator<LogInRequest>, LogInRequestValidator>();
             services.AddTransient<IValidator<SaveBoardRequest>, SaveBoardRequestValidator>();
             services.AddTransient<IValidator<UpdateBoardRequest>, UpdateBoardRequestValidator>();
+            services.AddTransient<IValidator<IEnumerable<UpdateCardStatusRequest>>, UpdateCardStatusRequestValidator>();
 
             #endregion
 

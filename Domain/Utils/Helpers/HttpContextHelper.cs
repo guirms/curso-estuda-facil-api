@@ -9,14 +9,17 @@ namespace Domain.Utils.Helpers
     {
         private static JwtSecurityToken? HeaderAuthToken { get; set; }
 
-        public static int GetUserId()
-            => HeaderAuthToken?.GetClaimValue(HeaderKey.NameIdentifier)?.ToInt("InvalidAuthToken")
-                ?? throw new InvalidOperationException("ErrorGettingSessionInfo");
-
-        public static void SaveTokens(this IHttpContextAccessor contextAccessor)
+        public static void SetSessionInfo(this IHttpContextAccessor contextAccessor, bool isAllowAnonymous)
         {
             HeaderAuthToken = contextAccessor.GetAuthTokenByHeader();
+
+            if (!isAllowAnonymous)
+                Session.UserId = GetUserId();
         }
+
+        private static int GetUserId()
+            => HeaderAuthToken?.GetClaimValue(HeaderKey.NameIdentifier)?.ToInt("InvalidAuthToken")
+                ?? throw new InvalidOperationException("ErrorGettingSessionInfo");
 
         private static JwtSecurityToken? GetAuthTokenByHeader(this IHttpContextAccessor contextAccessor)
         {

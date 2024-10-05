@@ -13,14 +13,14 @@ namespace Domain.Objects.Requests.User
         public required string PasswordConfirmation { get; set; }
     }
 
-    public partial class UserRequestValidator : AbstractValidator<SaveUserRequest>
+    public partial class SaveUserRequestValidator : AbstractValidator<SaveUserRequest>
     {
         [GeneratedRegex(@"[!@#$%^&*(),.?""':{}|<>]")]
-        private static partial Regex specialCharacterPattern();
+        private static partial Regex SpecialCharacterPattern();
 
-        public UserRequestValidator()
+        public SaveUserRequestValidator()
         {
-            RuleFor(u => u)
+            RuleFor(s => s)
                 .Must(HaveValidFields);
         }
 
@@ -31,33 +31,32 @@ namespace Domain.Objects.Requests.User
             var document = saveUserRequest.Document;
 
             if (password != saveUserRequest.PasswordConfirmation)
-                throw new ValidationException("PasswordsAreNotTheSame");
+                throw new ValidationException("As senhas não são iguais");
 
             if (name.IsNullOrEmpty() || name.Length > 50)
-                throw new ValidationException("InvalidUsername");
+                throw new ValidationException("Nome inválido");
 
             if (!saveUserRequest.Email.IsValidEmail())
-                throw new ValidationException("InvalidEmail");
+                throw new ValidationException("Email inválido");
 
             if (!document.IsValidCpf())
-                throw new ValidationException("InvalidDocument");
+                throw new ValidationException("Documento inválido");
 
-            if (!IsValidPassword(password))
-                throw new ValidationException("InvalidUserPassword");
+            IsValidPassword(password);
 
             return true;
         }
 
-        public static bool IsValidPassword(string password)
+        private static bool IsValidPassword(string password)
         {
             if (password.IsNullOrEmpty() || password.Length < 8 || password.Length > 50)
-                throw new ValidationException("PasswordMustHaveValidLength");
+                throw new ValidationException("A senha precisa ter entre 8 e 50 caracteres");
 
-            if (!specialCharacterPattern().IsMatch(password))
-                throw new ValidationException("PasswordMustHaveSpecialCharacter");
+            if (!SpecialCharacterPattern().IsMatch(password))
+                throw new ValidationException("A senha precisa ter caracteres especiais");
 
             if (!password.Any(char.IsLower) || !password.Any(char.IsUpper))
-                throw new ValidationException("PasswordMustContainUppercaseAndLowercase");
+                throw new ValidationException("A senha precisa possuir caracteres minúsculos e maiúsculos");
 
             return true;
         }

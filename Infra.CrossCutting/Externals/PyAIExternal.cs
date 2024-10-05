@@ -15,7 +15,7 @@ namespace Infra.CrossCutting.Externals
             {
                 var parameters = new Dictionary<string, string?>
                 {
-                    ["use_openai"] = "false",
+                    ["use_openai"] = "true",
                     ["theme"] = theme,
                     ["days_until_exam"] = daysUntilExam.ToString()
                 };
